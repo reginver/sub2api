@@ -60,11 +60,12 @@ func main() {
 		Addr:    addr,
 		Handler: mux,
 		// Set explicit timeouts to avoid hanging connections.
-		// Increased ReadTimeout to 90s since some subscription sources
-		// behind slow networks can take a while to respond.
-		ReadTimeout:  90 * time.Second,
-		WriteTimeout: 90 * time.Second,
-		IdleTimeout:  120 * time.Second,
+		// Increased ReadTimeout to 120s since some subscription sources
+		// behind slow networks (e.g. certain regional ISPs) can take
+		// well over 90s to respond in practice.
+		ReadTimeout:  120 * time.Second,
+		WriteTimeout: 120 * time.Second,
+		IdleTimeout:  180 * time.Second,
 	}
 
 	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
