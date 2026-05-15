@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/sub2api/sub2api/handler"
 )
@@ -59,9 +60,9 @@ func main() {
 		Addr:    addr,
 		Handler: mux,
 		// Set explicit timeouts to avoid hanging connections
-		ReadTimeout:  30 * 1e9, // 30 seconds in nanoseconds
-		WriteTimeout: 30 * 1e9,
-		IdleTimeout:  60 * 1e9,
+		ReadTimeout:  30 * time.Second,
+		WriteTimeout: 30 * time.Second,
+		IdleTimeout:  60 * time.Second,
 	}
 
 	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
