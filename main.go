@@ -35,7 +35,8 @@ func main() {
 		os.Exit(0)
 	}
 
-	// Allow port override via environment variable
+	// Allow port override via environment variable.
+	// Environment variable takes precedence over the -port flag.
 	if envPort := os.Getenv("PORT"); envPort != "" {
 		p, err := strconv.Atoi(envPort)
 		if err != nil {
@@ -57,6 +58,10 @@ func main() {
 	server := &http.Server{
 		Addr:    addr,
 		Handler: mux,
+		// Set explicit timeouts to avoid hanging connections
+		ReadTimeout:  30 * 1e9, // 30 seconds in nanoseconds
+		WriteTimeout: 30 * 1e9,
+		IdleTimeout:  60 * 1e9,
 	}
 
 	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
